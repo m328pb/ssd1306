@@ -27,23 +27,22 @@
 #define PGMREAD pgm_read_dword
 #endif
 
-class oled // : public Print
+class oled
 {
 
 private:
-    void initialize();
     void cmd(const uint8_t *command, uint8_t size, bool progmem = false);
     void setCursor();
     void drawChar(char c);
     const FONT_TYPE (*font)[FONT_WIDTH];
     void writeCol(uint64_t col);
     uint8_t char_buffer[CHAR_BYTES];
-    unsigned int index = 0;
+    unsigned int index = 0; // column of the char
     void init_char_buffer(void);
-
-public:
     uint8_t x;
     uint8_t y;
+
+public:
     bool invert;
     bool isOLED;
     oled();
