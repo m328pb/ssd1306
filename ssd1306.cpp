@@ -71,7 +71,7 @@ oled::oled() : font(FONT), x(0), y(0), invert(false)
         0xAF}; // display on
     cmd(init, sizeof(init), true);
     clear();
-};
+}
 
 void oled::init_char_buffer(void)
 {
@@ -93,7 +93,7 @@ void oled::setCursor()
     };
 
     cmd(init, sizeof(init) / sizeof(init[0]));
-};
+}
 
 void oled::clear()
 {
@@ -151,7 +151,9 @@ void oled::cmd(const uint8_t *cmds, uint8_t n, bool progmem)
     // otherway use regular memory
     if (isOLED)
     {
-        uint8_t buffer[n + 1] = {0};
+        if (n > 31)
+            n = 31;
+        uint8_t buffer[32] = {0};
         // leave first element 0, means command mode: Co = 0, D/C = 0
         if (progmem)
         {
