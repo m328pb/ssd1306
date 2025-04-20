@@ -1,5 +1,7 @@
 #pragma once
 
+#include "i2c.h"
+
 // chose the font you want to use from font folder
 // only one font possible!!
 #include "fonts/font6x16.h"
@@ -32,6 +34,8 @@ class oled
 
 private:
     void cmd(const uint8_t *command, uint8_t size, bool progmem = false);
+    void initialize(void);
+    bool check_status(void);
     void setCursor();
     void drawChar(char c);
     const FONT_TYPE (*font)[FONT_WIDTH];
@@ -45,6 +49,7 @@ private:
 public:
     bool invert;
     bool isOLED;
+    I2C_status OLED_status;
     oled();
     void clear();
     void setPos(uint8_t x, uint8_t y);

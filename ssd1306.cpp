@@ -2,7 +2,6 @@
 #include <strings.h>
 #include <string.h>
 #include "ssd1306.h"
-#include "i2c.h"
 
 /*
  Maximum simplified lib for text displaying on SSD1306 OLED display
@@ -25,7 +24,11 @@ extern const FONT_TYPE FONT[][FONT_WIDTH];
 
 oled::oled() : font(FONT), x(0), y(0), invert(false)
 {
-    isOLED = true;
+    initialize();
+}
+
+void oled::initialize()
+{
     mw_init();
     // Init sequence
     static const uint8_t PROGMEM init[] = {
@@ -69,13 +72,29 @@ oled::oled() : font(FONT), x(0), y(0), invert(false)
 
         0x2E,  // Deactivate scroll
         0xAF}; // display on
-    cmd(init, sizeof(init), true);
+    cmd(init, sizeof(init) / sizeof(init[0]), true);
     clear();
+}
+
+bool oled::check_status()
+{
+    if (OLED_status == TW_NO_INFO || OLED_status == TW_DATA_ACK)
+        return true;
+
+    if (OLED_status == TW_DATA_NACK) // data not acknowledged, but LCD present
+    {
+        uint8_t count = 0;
+        while (OLED_status != TW_DATA_ACK && count++ < 10)
+            initialize();
+        if (count < 10)
+            return true;
+    }
+    return false;
 }
 
 void oled::init_char_buffer(void)
 {
-    mem_set(char_buffer, CHAR_BYTES,0x0);
+    mem_set(char_buffer, CHAR_BYTES, 0x0);
     index = 0;
     char_buffer[index++] = 0x40;
 }
@@ -97,21 +116,18 @@ void oled::setCursor()
 
 void oled::clear()
 {
-    if (isOLED)
+    uint8_t store_x = x;
+    uint8_t store_y = y;
+    setPos(0, 0);
+
+    for (int i = 0; i < ROWS; i++)
     {
-        uint8_t store_x = x;
-        uint8_t store_y = y;
-        setPos(0, 0);
-
-        for (int i = 0; i < ROWS; i++)
-        {
-            setPos(0, i);
-            for (int j = 0; j <= COLS; j++)
-                print(0x20); // 'space'
-        }
-
-        setPos(store_x, store_y);
+        setPos(0, i);
+        for (int j = 0; j <= COLS; j++)
+            print(0x20); // 'space'
     }
+
+    setPos(store_x, store_y);
 }
 
 void oled::print(const char *str)
@@ -129,18 +145,15 @@ void oled::println(const char *str)
 
 void oled::print(const char c)
 {
-    if (isOLED)
+    if (!c)
+        return;
+    if (c == '\n') // coming from println
     {
-        if (!c)
-            return;
-        if (c == '\n') // coming from println
-        {
-            y++;
-            setPos(x, y);
-            return;
-        }
-        drawChar(c);
+        y++;
+        setPos(x, y);
+        return;
     }
+    drawChar(c);
 }
 
 void oled::cmd(const uint8_t *cmds, uint8_t n, bool progmem)
@@ -149,29 +162,30 @@ void oled::cmd(const uint8_t *cmds, uint8_t n, bool progmem)
     // don't send more then TWI_BUFFER_SIZE (32) bytes at once
     // if (progmem) use pgmspace library (cmd set with PRAGMA)
     // otherway use regular memory
-    if (isOLED)
-    {
-        if (n > 31)
-            n = 31;
-        uint8_t buffer[32] = {0};
-        // leave first element 0, means command mode: Co = 0, D/C = 0
-        if (progmem)
-        {
-            for (int i = 0; i < n; i++)
-                buffer[i + 1] = pgm_read_byte(cmds++);
-        }
-        else
-            mem_copy(&buffer[1], n, cmds);
+    if (!check_status())
+        return;
 
-        if (mw_write(buffer, n + 1))
-            isOLED = true;
-        else
-            isOLED = false;
+    if (n > 31)
+        n = 31;
+    uint8_t buffer[32] = {0};
+    // leave first element 0, means command mode: Co = 0, D/C = 0
+    if (progmem)
+    {
+        for (int i = 0; i < n; i++)
+            buffer[i + 1] = pgm_read_byte(cmds++);
     }
+    else
+        mem_copy(&buffer[1], n, cmds);
+
+    OLED_status = mw_write(buffer, n + 1);
 }
 
 void oled::drawChar(const char c)
 {
+
+    if (!check_status())
+        return;
+
     init_char_buffer();
     FONT_TYPE line;
 
@@ -183,7 +197,7 @@ void oled::drawChar(const char c)
         writeCol(line);
     }
     writeCol((FONT_TYPE)0x00); // space between chars
-    mw_write(char_buffer, CHAR_BYTES);
+    OLED_status = mw_write(char_buffer, CHAR_BYTES);
 }
 
 void oled::setPos(uint8_t x, uint8_t y)
