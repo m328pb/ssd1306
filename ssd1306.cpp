@@ -6,7 +6,7 @@
 /*
  Maximum simplified lib for text displaying on SSD1306 OLED display
  initializing the class will already initialize the OLED and set cursor to 0,0
- uer methods are:
+ user methods are:
  .clear() - clear display, also restore position to x,y
  .print(char *c) - print text
  .println(char *c) - print text and return to begining. NOT CHNAGING TO NEW LINE
