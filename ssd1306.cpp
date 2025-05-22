@@ -19,12 +19,14 @@
 */
 
 // select desired font in min_SSDI1306.h file
-/*extern const FONT_TYPE FONT[][FONT_WIDTH];*/
 
-oled::oled() : font(FONT), x(0), y(0), invert(false) { initialize(); }
+oled::oled()
+    : comm(SSD1306_I2C_ADDRESS), font(FONT), x(0), y(0), invert(false) {
+  initialize();
+}
 
 void oled::initialize() {
-  mw_init();
+  comm.init();
   // Init sequence
   static const uint8_t PROGMEM init[] = {
       0xAE, // display off
@@ -74,13 +76,13 @@ void oled::initialize() {
 }
 
 bool oled::check_status() {
-  if (OLED_status == TW_NO_INFO || OLED_status == TW_DATA_ACK)
+  if (err == comm.NO_ERR)
     return true;
 
-  if (OLED_status == TW_DATA_NACK) // data not acknowledged, but LCD present
+  if (err == comm.COM_ERR) // data not acknowledged, but LCD present
   {
     uint8_t count = 0;
-    while (OLED_status != TW_DATA_ACK && count++ < 10)
+    while (err != comm.NO_ERR && count++ < 10)
       initialize();
     if (count < 10)
       return true;
@@ -163,7 +165,7 @@ void oled::cmd(const uint8_t *cmds, uint8_t n, bool progmem) {
   } else
     mem_copy(&buffer[1], n, cmds);
 
-  OLED_status = mw_write(buffer, n + 1);
+  err = comm.write(buffer, n + 1);
 }
 
 void oled::drawChar(const char c) {
@@ -181,7 +183,7 @@ void oled::drawChar(const char c) {
     writeCol(line);
   }
   writeCol((FONT_TYPE)0x00); // space between chars
-  OLED_status = mw_write(char_buffer, CHAR_BYTES);
+  err = comm.write(char_buffer, CHAR_BYTES);
 }
 
 void oled::setPos(uint8_t x, uint8_t y) {

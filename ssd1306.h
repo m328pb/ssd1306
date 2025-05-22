@@ -7,6 +7,7 @@
 #include "fonts/font6x16.h"
 // #include "fonts/font19x32.h"
 
+#define SSD1306_I2C_ADDRESS 0x3C
 #define WIDTH 128 // screen width
 #define HEIGHT 32 // screen height
 #define CONTRAST 0x7D
@@ -32,6 +33,7 @@
 class oled {
 
 private:
+  I2C comm; // possibly you can use other protocol
   void cmd(const uint8_t *command, uint8_t size, bool progmem = false);
   void initialize(void);
   bool check_status(void);
@@ -44,15 +46,16 @@ private:
   void init_char_buffer(void);
   uint8_t x;
   uint8_t y;
+  I2C::error err;
 
 public:
   bool invert;
   bool isOLED;
-  I2C_status OLED_status;
-  oled();
+  I2C &get() { return comm; }; // adjust returned type to used protocol
   void clear();
   void setPos(uint8_t x, uint8_t y);
   void println(const char *c);
   void print(const char *c);
   void print(const char c);
+  oled();
 };
