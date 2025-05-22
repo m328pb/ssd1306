@@ -1,7 +1,6 @@
 // Copyright (c) 2020 lynniemagoo and RinkyDink Electronics
 // https://github.com/lynniemagoo/oled-font-pack
-#ifndef FONT8x16_H
-#define FONT8x16_H
+#pragma once
 #include <stdint.h>
 #include <avr/pgmspace.h>
 
@@ -113,4 +112,3 @@ const uint16_t FONT[][FONT_WIDTH] PROGMEM =
 {0x3003,0x3003,0x3f3f,0x0ffc,0x00c0,0x00c0},  // }
 {0x03c0,0x0030,0x00c0,0x0300,0x00f0,0x0000}   // ~
 };
-#endif
