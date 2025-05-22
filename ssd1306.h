@@ -50,7 +50,6 @@ private:
 
 public:
   bool invert;
-  bool isOLED;
   I2C &get() { return comm; }; // adjust returned type to used protocol
   void clear();
   void setPos(uint8_t x, uint8_t y);
