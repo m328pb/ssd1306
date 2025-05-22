@@ -1,0 +1,7 @@
+# file with profiles
+# phs - pre heat time (uint16_t)
+# pht - pre heat temperature (uint16_t)
+# ht - heat temperature (uint16_t)
+# no spaces! Ends with '/'!
+# phs/pht/ht/
+21/123/234/
