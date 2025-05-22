@@ -13,7 +13,7 @@ Just set display size and choose font in `ssd1306.h`
 - tested on I2C 32x128 display, and there is no plan to use other protocols.
 
 - included folder with differnt size fonts,
-from [](https://github.com/lynniemagoo/oled-font-pack)
+from [https://github.com/lynniemagoo/oled-font-pack](https://github.com/lynniemagoo/oled-font-pack)
 
 - fonts are memory thirsty, for example, very small fonts (5x8 pixels)
 require 5x95 = 475B. Average size 6x16 would take 6x2x95=1.1kB.
