@@ -38,7 +38,7 @@ typedef enum : uint8_t {
 
 DEV_ERR will stop any further communication attempts.
 When COM_ERR is detected, the lib will re-send data (10 times max).
-protocol() expose all methods from communication class if present.
+get() expose all methods from communication class if present.
 This protocol works "out of the box": [I2C](https:/github.com/m328pb/i2c).
 
 ## notes

@@ -14,10 +14,7 @@
  adjust also CONTRAST in ssd1306.h file
 */
 
-oled::oled()
-    : comm(), font(FONT), x(0), y(0), invert(false) {
-  initialize();
-}
+oled::oled() : comm(), font(FONT), x(0), y(0), invert(false) { initialize(); }
 
 void oled::initialize() {
   comm.init(SSD1306_I2C_ADDRESS, 100); // address, speed kHz
@@ -177,7 +174,10 @@ void oled::drawChar(const char c) {
       line = ~line;
     writeCol(line);
   }
-  writeCol((FONT_TYPE)0x00); // space between chars
+  if (invert)
+    writeCol((FONT_TYPE)0xFFFFFFFF);
+  else
+    writeCol((FONT_TYPE)0x00); // space between chars
   comm.send_ln(char_buffer, CHAR_BYTES);
 }
 
