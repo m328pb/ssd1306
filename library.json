@@ -5,7 +5,7 @@
 	"keywords": "oled, ssd1306, display, arduino, atmega328",
 	"repository":{
 		"type":"git",
-		"url":"https://github.com/zielaskowski/ssd1306"
+		"url":"https://github.com/m328pb/ssd1306"
 	},
 	"authors":{
 		"name":"Michal Zielaskowski",

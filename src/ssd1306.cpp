@@ -7,24 +7,20 @@
  .clear() - clear display, also restore position to x,y
  .print(char *c) - print text
  .println(char *c) - print text and return to begining. NOT CHNAGING TO NEW LINE
- .x .y to to set cursor position
- .invert to "colors"
- isOLED is true if display is connected
+ .invert "colors"
 
- setup display pixels in min_SSD1306.h file
- select desired font in min_SSDI1306.h file, possible fonts are in font.h file
- adjust also CONTRAST in min_SSD1306.h file
+ setup display pixels in ssd1306.h file
+ select desired font in ssd1306.h file, possible fonts are in font.h file
+ adjust also CONTRAST in ssd1306.h file
 */
 
-// select desired font in min_SSDI1306.h file
-
 oled::oled()
-    : comm(SSD1306_I2C_ADDRESS), font(FONT), x(0), y(0), invert(false) {
+    : comm(), font(FONT), x(0), y(0), invert(false) {
   initialize();
 }
 
 void oled::initialize() {
-  comm.init();
+  comm.init(SSD1306_I2C_ADDRESS, 100); // address, speed kHz
   // Init sequence
   static const uint8_t PROGMEM init[] = {
       0xAE, // display off
@@ -164,7 +160,7 @@ void oled::cmd(const uint8_t *cmds, uint8_t n, bool progmem) {
   } else
     mem_copy(&buffer[1], n, cmds);
 
-  comm.write(buffer, n + 1);
+  comm.send_ln(buffer, n + 1);
 }
 
 void oled::drawChar(const char c) {
@@ -182,7 +178,7 @@ void oled::drawChar(const char c) {
     writeCol(line);
   }
   writeCol((FONT_TYPE)0x00); // space between chars
-  comm.write(char_buffer, CHAR_BYTES);
+  comm.send_ln(char_buffer, CHAR_BYTES);
 }
 
 void oled::setPos(uint8_t x, uint8_t y) {

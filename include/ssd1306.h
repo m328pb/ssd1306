@@ -1,9 +1,7 @@
 #pragma once
-
-#include "i2c.h"
 #include <avr/pgmspace.h>
-#include <cstdint>
-#include <strings.h>
+#include "i2c.h"
+#include "strings.h"
 
 // chose the font you want to use from font folder
 // only one font possible!!
@@ -33,24 +31,26 @@
 #define PGMREAD pgm_read_dword
 #endif
 
-
-class oled  {
+class oled {
 
 private:
   I2C comm; // possibly you can use other protocol
+
+  const FONT_TYPE (*font)[FONT_WIDTH];
+  uint8_t char_buffer[CHAR_BYTES];
+  unsigned int index = 0; // column of the char
+  uint8_t x;
+  uint8_t y;
+  I2C::error err;
+
   void cmd(const uint8_t *command, uint8_t size, bool progmem = false);
   void initialize(void);
   bool check_status(void);
   void setCursor();
   void drawChar(char c);
-  const FONT_TYPE (*font)[FONT_WIDTH];
   void writeCol(uint64_t col);
-  uint8_t char_buffer[CHAR_BYTES];
-  unsigned int index = 0; // column of the char
   void init_char_buffer(void);
-  uint8_t x;
-  uint8_t y;
-  I2C::error err;
+  void print(const char c);
 
 public:
   bool invert;
@@ -59,6 +59,5 @@ public:
   void setPos(uint8_t x, uint8_t y);
   void println(const char *c);
   void print(const char *c);
-  void print(const char c);
   oled();
 };
