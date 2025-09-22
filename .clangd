@@ -1,0 +1,5 @@
+CompileFlags:
+  Add:
+    # Define chip, as compiledb do not include compiler flags for external libs
+    # should not make nay impact, just problems with clangd LSP
+    - -mmcu=atmega328p

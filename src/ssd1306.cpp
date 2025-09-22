@@ -1,6 +1,4 @@
 #include "ssd1306.h"
-#include <avr/pgmspace.h>
-#include <strings.h>
 
 /*
  Maximum simplified lib for text displaying on SSD1306 OLED display
@@ -76,17 +74,18 @@ void oled::initialize() {
 }
 
 bool oled::check_status() {
-  if (err == comm.NO_ERR)
+  if (comm.err == comm.NO_ERR)
     return true;
 
-  if (err == comm.COM_ERR) // data not acknowledged, but LCD present
+  if (comm.err == comm.COM_ERR) // data not acknowledged, but LCD present
   {
     uint8_t count = 0;
-    while (err != comm.NO_ERR && count++ < 10)
+    while (comm.err != comm.NO_ERR && count++ < 10)
       initialize();
     if (count < 10)
       return true;
   }
+  comm.off();
   return false;
 }
 
@@ -165,7 +164,7 @@ void oled::cmd(const uint8_t *cmds, uint8_t n, bool progmem) {
   } else
     mem_copy(&buffer[1], n, cmds);
 
-  err = comm.write(buffer, n + 1);
+  comm.write(buffer, n + 1);
 }
 
 void oled::drawChar(const char c) {
@@ -183,7 +182,7 @@ void oled::drawChar(const char c) {
     writeCol(line);
   }
   writeCol((FONT_TYPE)0x00); // space between chars
-  err = comm.write(char_buffer, CHAR_BYTES);
+  comm.write(char_buffer, CHAR_BYTES);
 }
 
 void oled::setPos(uint8_t x, uint8_t y) {

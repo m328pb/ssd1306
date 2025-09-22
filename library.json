@@ -1,0 +1,20 @@
+{
+	"name": "ssd1306",
+	"version": "0.9.0",
+	"description": "interface for OLED display based on SSD1306 chip",
+	"keywords": "oled, ssd1306, display, arduino, atmega328",
+	"repository":{
+		"type":"git",
+		"url":"https://github.com/zielaskowski/ssd1306"
+	},
+	"authors":{
+		"name":"Michal Zielaskowski",
+		"email":"michal.zielaskowski@gmail.com"
+	},
+	"license":"MIT",
+	"frameworks":"arduino",
+	"platforms":"atmelvar",
+	"examples":[
+		"examples/*/*.c"
+	]
+}

@@ -1,6 +1,9 @@
 #pragma once
 
 #include "i2c.h"
+#include <avr/pgmspace.h>
+#include <cstdint>
+#include <strings.h>
 
 // chose the font you want to use from font folder
 // only one font possible!!
@@ -30,7 +33,8 @@
 #define PGMREAD pgm_read_dword
 #endif
 
-class oled {
+
+class oled  {
 
 private:
   I2C comm; // possibly you can use other protocol
