@@ -14,9 +14,9 @@
  adjust also CONTRAST in ssd1306.h file
 */
 
-oled::oled() : comm(), font(FONT), x(0), y(0), invert(false) { initialize(); }
+OLED::OLED() : comm(), font(FONT), x(0), y(0), invert(false) { initialize(); }
 
-void oled::initialize() {
+void OLED::initialize() {
   comm.init(SSD1306_I2C_ADDRESS, 100); // address, speed kHz
   // Init sequence
   static const uint8_t PROGMEM init[] = {
@@ -66,7 +66,7 @@ void oled::initialize() {
   clear();
 }
 
-bool oled::check_status() {
+bool OLED::check_status() {
   if (comm.err == comm.NO_ERR)
     return true;
 
@@ -82,13 +82,13 @@ bool oled::check_status() {
   return false;
 }
 
-void oled::init_char_buffer(void) {
+void OLED::init_char_buffer(void) {
   mem_set(char_buffer, CHAR_BYTES, 0x0);
   index = 0;
   char_buffer[index++] = 0x40;
 }
 
-void oled::setCursor() {
+void OLED::setCursor() {
   uint8_t init[] = {
       0x21,                      // set column address range
       (uint8_t)(x * FONT_WIDTH), // start column
@@ -102,7 +102,7 @@ void oled::setCursor() {
   cmd(init, sizeof(init) / sizeof(init[0]));
 }
 
-void oled::clear() {
+void OLED::clear() {
   uint8_t store_x = x;
   uint8_t store_y = y;
   setPos(0, 0);
@@ -116,18 +116,18 @@ void oled::clear() {
   setPos(store_x, store_y);
 }
 
-void oled::print(const char *str) {
+void OLED::print(const char *str) {
   uint8_t n = str_len(str);
   while (n--)
     print(*str++);
 }
 
-void oled::println(const char *str) {
+void OLED::println(const char *str) {
   print(str);
   print('\n');
 }
 
-void oled::print(const char c) {
+void OLED::print(const char c) {
   if (!c)
     return;
   if (c == '\n') // coming from println
@@ -139,7 +139,7 @@ void oled::print(const char c) {
   drawChar(c);
 }
 
-void oled::cmd(const uint8_t *cmds, uint8_t n, bool progmem) {
+void OLED::cmd(const uint8_t *cmds, uint8_t n, bool progmem) {
   // send set of commands to the display
   // don't send more then TWI_BUFFER_SIZE (32) bytes at once
   // if (progmem) use pgmspace library (cmd set with PRAGMA)
@@ -160,7 +160,7 @@ void oled::cmd(const uint8_t *cmds, uint8_t n, bool progmem) {
   comm.send_ln(buffer, n + 1);
 }
 
-void oled::drawChar(const char c) {
+void OLED::drawChar(const char c) {
 
   if (!check_status())
     return;
@@ -181,7 +181,7 @@ void oled::drawChar(const char c) {
   comm.send_ln(char_buffer, CHAR_BYTES);
 }
 
-void oled::setPos(uint8_t x, uint8_t y) {
+void OLED::setPos(uint8_t x, uint8_t y) {
   if (y * PAGES_PER_FONT > PAGES)
     y = PAGES;
   if (x >= WIDTH / FONT_WIDTH)
@@ -192,7 +192,7 @@ void oled::setPos(uint8_t x, uint8_t y) {
   setCursor();
 }
 
-void oled::writeCol(uint64_t col) {
+void OLED::writeCol(uint64_t col) {
   // iterate over variable in 8bits chunks
   for (int i = 0; i < PAGES_PER_FONT; i++) {
     uint8_t c = col >> (8 * i);
