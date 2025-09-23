@@ -1,7 +1,7 @@
 #include "ssd1306.h"
 
 int main() {
-  oled display;
+  OLED display;
   display.clear();
   display.setPos(1, 1);
   display.println("test ssd1306");

@@ -31,7 +31,7 @@
 #define PGMREAD pgm_read_dword
 #endif
 
-class oled {
+class OLED{
 
 private:
   I2C comm; // possibly you can use other protocol
@@ -59,5 +59,5 @@ public:
   void setPos(uint8_t x, uint8_t y);
   void println(const char *c);
   void print(const char *c);
-  oled();
+  OLED();
 };
