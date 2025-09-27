@@ -12,8 +12,7 @@
 		"email":"michal.zielaskowski@gmail.com"
 	},
 	"license":"GPL-3.0 license",
-	"frameworks":"arduino",
-	"platforms":"atmelvar",
+	"platforms":"atmelavr",
 	"dependencies":{
 		"external-repo":"https://github.com/m328pb/i2c",
 		"external-repo":"https://github.com/m328pb/strings"
