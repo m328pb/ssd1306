@@ -15,10 +15,16 @@
 	"platforms":"atmelavr",
 	"dependencies":[
 		{
-		"external-repo":"https://github.com/m328pb/i2c"
+		"repository":{
+			"type": "git",
+			"url": "https://github.com/m328pb/i2c"
+			}
 		},
 		{
-		"external-repo":"https://github.com/m328pb/strings"
+		"repository":{
+			"type": "git",
+			"url": "https://github.com/m328pb/strings"
+			}
 		}
 	],
 	"examples":[
