@@ -16,18 +16,14 @@
 	"dependencies":[
 		{
 		"repository":{
-			"name": "I2C",
-			"version": "*",
-			"type": "git",
-			"url": "https://github.com/m328pb/i2c"
+			"name": "external-repo",
+			"version": "https://github.com/m328pb/i2c"
 			}
 		},
 		{
 		"repository":{
-			"name": "strings",
-			"version": "*",
-			"type": "git",
-			"url": "https://github.com/m328pb/strings"
+			"name": "external-repo",
+			"version": "https://github.com/m328pb/strings"
 			}
 		}
 	],
