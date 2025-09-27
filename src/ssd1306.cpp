@@ -116,17 +116,29 @@ void OLED::clear() {
   setPos(store_x, store_y);
 }
 
+/*
+ * @brief print string, do not hcnage the line
+ * @params str - string to display, MUST end with 0x0
+ */
 void OLED::print(const char *str) {
   uint8_t n = str_len(str);
   while (n--)
     print(*str++);
 }
 
+/*
+ * @brief display string and switch to next line
+ * @params str - pointer to string, MUST end with 0x0
+ */
 void OLED::println(const char *str) {
   print(str);
   print('\n');
 }
 
+/*
+ * @brief display single char
+ * @params c - char, if EOL switch to next line
+ */
 void OLED::print(const char c) {
   if (!c)
     return;

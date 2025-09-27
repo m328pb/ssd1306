@@ -50,7 +50,6 @@ private:
   void drawChar(char c);
   void writeCol(uint64_t col);
   void init_char_buffer(void);
-  void print(const char c);
 
 public:
   bool invert;
@@ -58,6 +57,7 @@ public:
   void clear();
   void setPos(uint8_t x, uint8_t y);
   void println(const char *c);
+  void print(const char c);
   void print(const char *c);
   OLED();
 };
