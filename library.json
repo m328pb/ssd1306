@@ -16,11 +16,11 @@
 	"dependencies":
 	[
 		{
-			"name": "external-repo",
+			"name": "I2C",
 			"version": "https://github.com/m328pb/i2c"
 		},
 		{
-			"name": "external-repo",
+			"name": "strings",
 			"version": "https://github.com/m328pb/strings"
 		}
 	],
