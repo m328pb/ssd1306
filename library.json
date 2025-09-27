@@ -13,10 +13,14 @@
 	},
 	"license":"GPL-3.0 license",
 	"platforms":"atmelavr",
-	"dependencies":{
-		"external-repo":"https://github.com/m328pb/i2c",
+	"dependencies":[
+		{
+		"external-repo":"https://github.com/m328pb/i2c"
+		},
+		{
 		"external-repo":"https://github.com/m328pb/strings"
-	},
+		}
+	],
 	"examples":[
 		"examples/*/*.c"
 	]
