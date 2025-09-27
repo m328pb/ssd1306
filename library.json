@@ -11,20 +11,17 @@
 		"name":"Michal Zielaskowski",
 		"email":"michal.zielaskowski@gmail.com"
 	},
-	"license":"GPL-3.0 license",
+	"license":"GPL-3.0",
 	"platforms":"atmelavr",
-	"dependencies":[
+	"dependencies":
+	[
 		{
-		"repository":{
 			"name": "external-repo",
 			"version": "https://github.com/m328pb/i2c"
-			}
 		},
 		{
-		"repository":{
 			"name": "external-repo",
 			"version": "https://github.com/m328pb/strings"
-			}
 		}
 	],
 	"examples":[
